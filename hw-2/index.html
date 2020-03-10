@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <title>ITEA NODEJS - HW2</title>
+    <style type="text/css">
+        body {
+            padding: 10% 20% 15% 30%;
+        }
+
+        h1  {
+            padding-bottom: 5%;
+            
+        }
+        h3 {
+            padding-top: 5%;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            const inputArray = document.getElementById('inputArray');
+            const getMinimum = document.getElementById('getMinimum');
+            const minResult = document.getElementById('minResult');
+            const fileExplorer = document.getElementById('fileExplorer');
+            const fileResult = document.getElementById('fileResult');
+
+            const getValue = function () {
+                minResult.innerText = '';
+
+                if (!inputArray.value) return;
+
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', '/calculate/min');
+                xhr.onload = function () {
+                    minResult.innerHTML = this.responseText;
+                };
+                xhr.onerror = (err) => console.log(err);
+                xhr.send(inputArray.value);
+            };
+
+            const getFileTree = function () {
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', '/file-tree');
+                xhr.onload = function () {
+                    const data = JSON.parse(this.responseText);
+                    let result = '';
+
+                    if (data && data.length) {
+                        data.forEach((i) => result += `${i}\r\n`)
+
+                    }
+                    fileResult.innerHTML = result;
+
+                    treeSubmit.remove();
+                };
+                xhr.onerror = (err) => console.log(err);
+                xhr.send();
+            };
+
+
+            getMinimum.addEventListener('click', getValue);
+            fileExplorer.addEventListener('click', getFileTree);
+
+        }
+    </script>
+  </head>
+  <body>
+    <h1>Данное приложение умеет находить минимум из массива чисел</h1>
+
+    
+    <form>
+        <h5>Введи числа в поле</h5>
+        <div class="input-group mb-3">
+            <input type="text" style="margin-right: 20px;width: 30%;" id="inputArray">
+            <button type="button" class="btn btn-outline-primary" id="getMinimum">Найти минимум</button>
+        </div>
+        <div>
+            <h5>Результат</h5>
+            <div id="minResult"></div>
+        </div>
+    </form>    
+    
+    <form>
+        <div>
+            <h3>Вывести все файлы</h3>
+            <button type="button" class="btn btn-outline-primary" id="fileExplorer">Вывести</button>
+        </div>
+        <div>
+            <h5>Результат</h5>
+            <div id="fileResult"></div>
+        </div>
+    </form>
+  </body>
+</html>

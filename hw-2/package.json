@@ -1,0 +1,14 @@
+{
+  "name": "nodejs-itea-hw2",
+  "version": "1.0.0",
+  "description": "app find minimum",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "author": "dsc-kek",
+  "license": "ISC",
+  "dependencies": {
+    "dsc-kek-math": "^1.0.1"
+  }
+}
